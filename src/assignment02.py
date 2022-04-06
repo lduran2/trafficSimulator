@@ -23,7 +23,7 @@ from math import copysign
 r = 70
 
 # radius of intersection
-intersection_r = 10
+intersection_r = 1.75
 
 # the roads, curves of the square track
 roads = []
@@ -42,19 +42,13 @@ for opp in signs:
         # calculate distances of the intersections
         (dx, dy) = (cx1 - cx0, cy1 - cy0)
         # calculate box edges
-        bx0 = cx0 + copysign(intersection_r, dx)*(dx != 0)
-        bx1 = cx1 - copysign(intersection_r, dx)*(dx != 0)
-        by0 = cy0 + copysign(intersection_r, dy)*(dy != 0)
-        by1 = cy1 - copysign(intersection_r, dy)*(dy != 0)
+        bx0 = cx0 - copysign(intersection_r, dx)*(dx != 0)
+        bx1 = cx1 + copysign(intersection_r, dx)*(dx != 0)
+        by0 = cy0 - copysign(intersection_r, dy)*(dy != 0)
+        by1 = cy1 + copysign(intersection_r, dy)*(dy != 0)
         # add the road
         roads = roads + [((bx0, by0), (bx1, by1))]
 # next adj, opp
-
-# for each sign of x
-for xsgn in signs:
-    for ysgn in  signs:
-        curves = curves + [(xsgn*r, ysgn*r)]
-# next ysgn, xsgn
 
 vehicle_data = {
     r'vehicle_rate': 50,
