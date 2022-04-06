@@ -2,11 +2,14 @@
 r'''
  Canonical: https://github.com/lduran2/trafficSimulator/src/assignment02.py
  By        : Leomar Durán <https://github.com/lduran2>
- When      : 2022-04-06t19:15Q
+ When      : 2022-04-06t19:43Q
  For       : CIS 4XXX/Introduction to Cyber-Physical Systems
- Version   : 2.0.1
+ Version   : 2.1.0
 
  CHANGELOG :
+    v2.1.0 - 2022-04-06t19:43Q
+        different possible paths
+
     v2.0.1 - 2022-04-06t19:15Q
         following paths cyclically
 
@@ -25,31 +28,40 @@ r'''
 from trafficSimulator import *
 from math import copysign
 
+# minimum number vehicles
+N_VEHICLES = 50
+
 # radius of circle touching midpoints of the lines of the square track
-r = 70
+R = 70
 
 # radius of intersection
-intersection_r = 0
+INTERSECTION_R = 0
 
 # the roads, curves of the square track
 roads = [
-    ((-r - intersection_r, -r), (+r + intersection_r, -r)),
-    ((+r, -r - intersection_r), (+r, +r + intersection_r)),
-    ((+r + intersection_r, +r), (-r - intersection_r, +r)),
-    ((-r, +r + intersection_r), (-r, -r - intersection_r))
+    ((-R - INTERSECTION_R, -R), (+R + INTERSECTION_R, -R)),
+    ((+R, -R - INTERSECTION_R), (+R, +R + INTERSECTION_R)),
+    ((+R + INTERSECTION_R, +R), (-R - INTERSECTION_R, +R)),
+    ((-R, +R + INTERSECTION_R), (-R, -R - INTERSECTION_R))
 ]
 
+# number roads
+N_ROADS = len(roads)
+
 vehicle_data = {
-    r'vehicle_rate': 50,
+    r'vehicle_rate': N_VEHICLES,
     r'vehicles': [
-        [1, {r'path': [0, 1, 2, 3, 0]}]
-    ] * 50
+        [1, {r'path': (list(range(4))*2)[0:][:5]}],
+        [1, {r'path': (list(range(4))*2)[1:][:5]}],
+        [1, {r'path': (list(range(4))*2)[2:][:5]}],
+        [1, {r'path': (list(range(4))*2)[3:][:5]}]
+    ] * ((N_VEHICLES // N_ROADS) + 1)
 }
 
 # print the data so far
-print('===roads===')
+print(r'===roads===')
 print(roads)
-print('===vehicle data===')
+print(r'===vehicle data===')
 print(vehicle_data)
 
 # create a simulation
@@ -63,4 +75,4 @@ win.offset = (0, 0)
 win.run(steps_per_update=1)
 
 # report done
-print('Done.')
+print(r'Done.')
