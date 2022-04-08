@@ -1,7 +1,14 @@
 import numpy as np
+import random
 
 class Vehicle:
-    def __init__(self, config={}):
+    def __init__(self, config={}, unif_alpha=1.0):
+        r'''
+         Initializes the vehicles for simulation.
+         @param unif_alpha : float = the acceleration is perturbed by a
+            random value in the distribution Unif[unif_alpha, 1.0]
+            every update (defaults to 1.0 for backwards compatibility)
+         '''
         # Set default configuration
         self.set_default_config()
 
@@ -11,6 +18,10 @@ class Vehicle:
 
         # Calculate properties
         self.init_properties()
+
+        # initialize the alpha for Unif[alpha, 1.0]
+        self.unif_alpha = unif_alpha
+    # def __init__(self, config={}, unif_alpha=1.0)
 
     def set_default_config(self):    
         self.l = 4
@@ -53,7 +64,13 @@ class Vehicle:
 
         if self.stopped: 
             self.a = -self.b_max*self.v/self.v_max
-        
+
+        # get the random variable eta_i
+        eta_i = random.uniform(alpha, 1.0)
+        # perturb the new acceleration
+        self.a *= eta_i
+    # def update(self, lead, dt)
+
     def stop(self):
         self.stopped = True
 
