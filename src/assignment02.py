@@ -39,10 +39,14 @@ INTERSECTION_R = 0
 
 # the roads, curves of the square track
 roads = [
+    # outer roads
     ((-R - INTERSECTION_R, -R), (+R + INTERSECTION_R, -R)),
     ((+R, -R - INTERSECTION_R), (+R, +R + INTERSECTION_R)),
     ((+R + INTERSECTION_R, +R), (-R - INTERSECTION_R, +R)),
-    ((-R, +R + INTERSECTION_R), (-R, -R - INTERSECTION_R))
+    ((-R, +R + INTERSECTION_R), (-R, -R - INTERSECTION_R)),
+    # add intersecting roads
+    ((0, -R), (0, R)),
+    ((R, 0), (-R, 0))
 ]
 
 # number roads
@@ -54,8 +58,12 @@ vehicle_data = {
         [1, {r'path': (list(range(4))*2)[0:][:5]}],
         [1, {r'path': (list(range(4))*2)[1:][:5]}],
         [1, {r'path': (list(range(4))*2)[2:][:5]}],
-        [1, {r'path': (list(range(4))*2)[3:][:5]}]
-    ] * ((N_VEHICLES // N_ROADS) + 1)
+        [1, {r'path': (list(range(4))*2)[3:][:5]}],
+        [1, {r'path': [0, 4, 5, 3, 0]}],
+        [1, {r'path': [0, 4, 2, 3, 0]}],
+        [1, {r'path': [1, 5, 3, 0, 1]}],
+        [1, {r'path': [1, 5, 4, 2, 3, 0, 1]}]
+    ] * ((N_VEHICLES // (N_ROADS + 4)) + 1)
 }
 
 # print the data so far
