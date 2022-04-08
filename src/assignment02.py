@@ -37,19 +37,35 @@ R = 70
 # radius of intersection
 INTERSECTION_R = 0
 
+# ask whether to use case 2.
+case2 = input('Use case #2 with the inner roads? [y, N otherwise]\n> ')
+
 # the roads, curves of the square track
 roads = [
     # outer roads
     ((-R - INTERSECTION_R, -R), (+R + INTERSECTION_R, -R)),
     ((+R, -R - INTERSECTION_R), (+R, +R + INTERSECTION_R)),
     ((+R + INTERSECTION_R, +R), (-R - INTERSECTION_R, +R)),
-    ((-R, +R + INTERSECTION_R), (-R, -R - INTERSECTION_R)),
-    # add intersecting roads
-    ((0, -R), (0, 0)),
-    ((0, 0), (0, R)),
-    ((R, 0), (0, 0)),
-    ((0, 0), (-R, 0))
+    ((-R, +R + INTERSECTION_R), (-R, -R - INTERSECTION_R))
 ]
+
+inner_tracks = []
+
+if (case2=='y' or case2=='Y'):
+    roads = roads + [
+        # add intersecting roads
+        ((0, -R), (0, 0)),
+        ((0, 0), (0, R)),
+        ((R, 0), (0, 0)),
+        ((0, 0), (-R, 0))
+    ]
+    inner_tracks = [
+    [1, {r'path': [0, 4, 7, 3, 0]}],
+        [1, {r'path': [0, 4, 5, 2, 3, 0]}],
+        [1, {r'path': [1, 6, 7, 3, 0, 1]}],
+        [1, {r'path': [1, 6, 5, 2, 3, 0, 1]}]
+    ]
+# end if (case2=='y' or case2=='Y')
 
 # number roads
 N_ROADS = len(roads)
@@ -61,10 +77,7 @@ vehicle_data = {
         [1, {r'path': (list(range(4))*2)[1:][:5]}],
         [1, {r'path': (list(range(4))*2)[2:][:5]}],
         [1, {r'path': (list(range(4))*2)[3:][:5]}],
-        [1, {r'path': [0, 4, 7, 3, 0]}],
-        [1, {r'path': [0, 4, 5, 2, 3, 0]}],
-        [1, {r'path': [1, 6, 7, 3, 0, 1]}],
-        [1, {r'path': [1, 6, 5, 2, 3, 0, 1]}]
+        *inner_tracks
     ] * ((N_VEHICLES // (N_ROADS + 4)) + 1)
 }
 
@@ -74,13 +87,23 @@ print(roads)
 print(r'===vehicle data===')
 print(vehicle_data)
 
+# ask for minimum perturbation
+try:
+    alpha = int(input('Please enter the minimum perturbation, [default to 1.0].\n> '))
+except:
+    # default to 1.0 on invalid integer
+    alpha = 1.0
+# end try int(input())
+
 # create a simulation
 sim = Simulation()
 sim.create_roads(roads)
-sim.create_gen(vehicle_data, 0.25)
+sim.create_gen(vehicle_data, alpha)
 
-# add the traffic signals
-sim.create_signal([[4, 5], [6, 7]])
+if (case2=='y' or case2=='Y'):
+    # add the traffic signals if inner roads
+    sim.create_signal([[4, 5], [6, 7]])
+# end if (case2=='y' or case2=='Y')
 
 # run the simulation
 win = Window(sim)
