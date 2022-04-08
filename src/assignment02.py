@@ -45,8 +45,10 @@ roads = [
     ((+R + INTERSECTION_R, +R), (-R - INTERSECTION_R, +R)),
     ((-R, +R + INTERSECTION_R), (-R, -R - INTERSECTION_R)),
     # add intersecting roads
-    ((0, -R), (0, R)),
-    ((R, 0), (-R, 0))
+    ((0, -R), (0, 0)),
+    ((0, 0), (0, R)),
+    ((R, 0), (0, 0)),
+    ((0, 0), (-R, 0))
 ]
 
 # number roads
@@ -59,10 +61,10 @@ vehicle_data = {
         [1, {r'path': (list(range(4))*2)[1:][:5]}],
         [1, {r'path': (list(range(4))*2)[2:][:5]}],
         [1, {r'path': (list(range(4))*2)[3:][:5]}],
-        [1, {r'path': [0, 4, 5, 3, 0]}],
-        [1, {r'path': [0, 4, 2, 3, 0]}],
-        [1, {r'path': [1, 5, 3, 0, 1]}],
-        [1, {r'path': [1, 5, 4, 2, 3, 0, 1]}]
+        [1, {r'path': [0, 4, 7, 3, 0]}],
+        [1, {r'path': [0, 4, 5, 2, 3, 0]}],
+        [1, {r'path': [1, 6, 7, 3, 0, 1]}],
+        [1, {r'path': [1, 6, 5, 2, 3, 0, 1]}]
     ] * ((N_VEHICLES // (N_ROADS + 4)) + 1)
 }
 
@@ -76,6 +78,9 @@ print(vehicle_data)
 sim = Simulation()
 sim.create_roads(roads)
 sim.create_gen(vehicle_data, 0.25)
+
+# add the traffic signals
+sim.create_signal([[4, 5], [6, 7]])
 
 # run the simulation
 win = Window(sim)
