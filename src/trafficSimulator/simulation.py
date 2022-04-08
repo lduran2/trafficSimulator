@@ -29,8 +29,16 @@ class Simulation:
         for road in road_list:
             self.create_road(*road)
 
-    def create_gen(self, config={}):
-        gen = VehicleGenerator(self, config)
+    def create_gen(self, config={}, alpha=1.0):
+        r'''
+         Creates a vehicle generator with minimum preturbation
+         inversely proportional to velocity.
+         @param alpha : float = each vehicle wil have the acceleration
+            perturbed by a
+            random value in the distribution Unif[alpha, 1.0]
+            every update (defaults to 1.0 for backwards compatibility)
+         '''
+        gen = VehicleGenerator(self, alpha, config)
         self.generators.append(gen)
         return gen
 

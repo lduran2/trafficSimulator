@@ -67,7 +67,7 @@ print(vehicle_data)
 # create a simulation
 sim = Simulation()
 sim.create_roads(roads)
-sim.create_gen(vehicle_data)
+sim.create_gen(vehicle_data, 0.25)
 
 # run the simulation
 win = Window(sim)
