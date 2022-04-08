@@ -2,7 +2,15 @@ from .vehicle import Vehicle
 from numpy.random import randint
 
 class VehicleGenerator:
-    def __init__(self, sim, config={}):
+    def __init__(self, sim, alpha, config={}):
+        r'''
+         Creates a vehicle generator with minimum preturbation
+         inversely proportional to velocity.
+         @param alpha : float = each vehicle wil have the acceleration
+            perturbed by a
+            random value in the distribution Unif[alpha, 1.0]
+            every update
+         '''
         self.sim = sim
 
         # Set default configurations
@@ -11,6 +19,9 @@ class VehicleGenerator:
         # Update configurations
         for attr, val in config.items():
             setattr(self, attr, val)
+
+        # set the preturbation parameter
+        self.alpha = alpha
 
         # Calculate properties
         self.init_properties()
@@ -33,7 +44,7 @@ class VehicleGenerator:
         for (weight, config) in self.vehicles:
             r -= weight
             if r <= 0:
-                return Vehicle(config)
+                return Vehicle(self.alpha, config)
 
     def update(self):
         """Add vehicles"""

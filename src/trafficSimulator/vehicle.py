@@ -2,12 +2,12 @@ import numpy as np
 import random
 
 class Vehicle:
-    def __init__(self, config={}, unif_alpha=1.0):
+    def __init__(self, unif_alpha, config={}):
         r'''
          Initializes the vehicles for simulation.
          @param unif_alpha : float = the acceleration is perturbed by a
             random value in the distribution Unif[unif_alpha, 1.0]
-            every update (defaults to 1.0 for backwards compatibility)
+            every update
          '''
         # Set default configuration
         self.set_default_config()
@@ -66,9 +66,10 @@ class Vehicle:
             self.a = -self.b_max*self.v/self.v_max
 
         # get the random variable eta_i
-        eta_i = random.uniform(alpha, 1.0)
+        eta_i = random.uniform(self.unif_alpha, 1.0)
         # perturb the new acceleration
-        self.a *= eta_i
+        old_a = self.a
+        self.a = old_a * eta_i
     # def update(self, lead, dt)
 
     def stop(self):
